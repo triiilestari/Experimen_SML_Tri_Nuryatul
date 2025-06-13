@@ -49,13 +49,21 @@ jobs:
           conda activate smsml
           python preprocessing/data_preprocessing.py
           
+      # move file result to processing
+      - name: Move artifacts to preprocessing folder
+        run: |
+          mv ./tokenizer.pkl preprocessing/tokenizer.pkl
+          mv ./split_dataset_result.pkl preprocessing/split_dataset_result.pkl
+          ls preprocessing
+          
       # Commit & Push Updated Files
       - name: Save data split and tokenizer to repo
         run: |
+          cd preprocessing
           git config --global user.name ${{ secrets.username }}
           git config --global user.email ${{ secrets.email }}
           git status
-          git add ner_dataset_split.pkl tokenizer.pkl
+          git add split_dataset_result.pkl tokenizer.pkl
           git commit -m "Auto-update dataset and tokenizer via GitHub Actions"
           git push origin main
   
