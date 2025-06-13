@@ -8,6 +8,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from ast import literal_eval
 import pickle
 from sklearn.model_selection import train_test_split
+import argparse
 
 class preprocessing():
     def __init__(self):
@@ -130,7 +131,7 @@ class preprocessing():
             Y_preprocessed.append(padded_tags)
         return Y_preprocessed
     
-    def split_dataset(self, X_preprocessed, Y_preprocessed):
+    def split_dataset(self, X_preprocessed, Y_preprocessed, file_path):
         try:
             indices = np.arange(len(Y_preprocessed))
             np.random.seed(seed=555)
@@ -147,7 +148,7 @@ class preprocessing():
                 "X_test": X_test,
                 "Y_test": Y_test
             } 
-            with open("ner_dataset_split.pkl", "wb") as f:
+            with open("{}.pkl".format(file_path), "wb") as f:
                 pickle.dump(data, f)
 
             print("Split Dataset completed successfully.")
@@ -156,7 +157,7 @@ class preprocessing():
             return False
         return True
 
-    def main(self, drive_id):
+    def main(self, drive_id, file_path):
         df = self.load_data(drive_id)
         df = self.handling_missing_value(df)
         words = self.reformat_dataframe(df)
@@ -166,10 +167,14 @@ class preprocessing():
         Y_preprocessed = self.preprocess_tags(tags2id, Y_ready)
         X_preprocessed = np.asarray(X_preprocessed)
         Y_preprocessed = np.asarray(Y_preprocessed)
-        status = self.split_dataset(X_preprocessed, Y_preprocessed)
+        status = self.split_dataset(X_preprocessed, Y_preprocessed, file_path)
         return status
 # Example usage (you can comment out this section if using as a module)
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--name_result", type=str, default="split_dataset_result")
+    args = parser.parse_args()
+    file_path = args.name_result
     prep = preprocessing()
     drive_id = "1OoaUzSoFI-ZwHMQ55vr3MBpuNDVtJ_CX"  # Change this to your CSV file path
-    status = prep.main(drive_id)
+    status = prep.main(drive_id, file_path)
