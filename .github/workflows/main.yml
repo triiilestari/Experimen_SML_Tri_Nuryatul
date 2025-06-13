@@ -48,28 +48,6 @@ jobs:
         run: |
           conda activate smsml
           python preprocessing/data_preprocessing.py
-
-      # debug file hasil preprocessing
-      - name: Debug files
-        run: |
-          pwd
-          ls -R .
-          find . -type f | grep -E "\.npz$|\.pkl$"
-          
-      # move file result to processing
-      - name: Move artifacts to preprocessing folder
-        run: |
-          mv ./tokenizer.pkl preprocessing/tokenizer.pkl
-          mv ./ner_dataset_split.pkl preprocessing/ner_dataset_split.pkl
-          ls preprocessing
-
-      # debug file after move
-      - name: Debug files
-        run: |
-          cd preprocessing
-          pwd
-          ls -R .
-          find . -type f | grep -E "\.npz$|\.pkl$"
           
       # Commit & Push Updated Files
       - name: Save data split and tokenizer to repo
@@ -77,7 +55,7 @@ jobs:
           git config --global user.name ${{ secrets.username }}
           git config --global user.email ${{ secrets.email }}
           git status
-          git add ./ner_dataset_split.pkl
+          git add ner_dataset_split.pkl tokenizer.pkl
           git commit -m "Auto-update dataset and tokenizer via GitHub Actions"
           git push origin main
   
