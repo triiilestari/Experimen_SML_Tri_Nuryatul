@@ -1,0 +1,84 @@
+name: preprocessing
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      # Set up Python environment
+      - name: Set up Python 3.12.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12.11"
+
+      # Install dependencies (incl. mlflow)
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: false
+          python-version: 3.12.11
+          
+      # Install dependency
+      - name: Install dependencies with pip inside Conda env
+        shell: bash -l {0}
+        run: |
+          conda create -y -n smsml python=3.12.11
+          conda activate smsml
+          pip install --upgrade pip
+          pip install -r preprocessing/requirements.txt
+
+      # Run training python file
+      - name: Run training script
+        shell : bash -l {0}
+        run: |
+          conda activate smsml
+          python preprocessing/data_preprocessing.py
+
+      # debug file hasil preprocessing
+      - name: Debug files
+        run: |
+          pwd
+          ls -R .
+          find . -type f | grep -E "\.npz$|\.pkl$"
+          
+      # move file result to processing
+      - name: Move artifacts to preprocessing folder
+        run: |
+          mv ./tokenizer.pkl preprocessing/tokenizer.pkl
+          mv ./ner_dataset_split.pkl preprocessing/ner_dataset_split.pkl
+
+      # debug file after move
+      - name: Debug files
+        run: |
+          cd preprocessing
+          pwd
+          ls -R .
+          find . -type f | grep -E "\.npz$|\.pkl$"
+          
+      # Commit & Push Updated Files
+      - name: Save data split and tokenizer to repo
+        run: |
+          cd preprocessing
+          git config --global user.name ${{ secrets.username }}
+          git config --global user.email ${{ secrets.email }}
+          git status
+          git add preprocessing/ner_dataset_split.pkl
+          git add preprocessing/tokenizer.pkl
+          git commit -m "Auto-update dataset and tokenizer via GitHub Actions"
+          git push origin main
+  
