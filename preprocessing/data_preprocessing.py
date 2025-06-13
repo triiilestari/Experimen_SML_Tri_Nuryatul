@@ -131,9 +131,6 @@ class preprocessing():
         return Y_preprocessed
     
     def split_dataset(self, X_preprocessed, Y_preprocessed, name_dataset):
-        training_samples = 0.7
-        validation_samples = 0.15
-        testing_samples = 0.15
         try:
             indices = np.arange(len(Y_preprocessed))
             np.random.seed(seed=555)
@@ -150,15 +147,16 @@ class preprocessing():
                 "X_test": X_test,
                 "Y_test": Y_test
             } 
-            with open("{}.pkl".format(name_dataset), "wb") as f:
+            with open("ner_dataset_split.pkl", "wb") as f:
                 pickle.dump(data, f)
+
             print("Split Dataset completed successfully.")
         except Exception as e:
             print(f"Error during split dataset: {e}")
             return False
         return True
 
-    def main(self, drive_id, name_dataset):
+    def main(self, drive_id):
         df = self.load_data(drive_id)
         df = self.handling_missing_value(df)
         words = self.reformat_dataframe(df)
@@ -168,11 +166,10 @@ class preprocessing():
         Y_preprocessed = self.preprocess_tags(tags2id, Y_ready)
         X_preprocessed = np.asarray(X_preprocessed)
         Y_preprocessed = np.asarray(Y_preprocessed)
-        status = self.split_dataset(X_preprocessed, Y_preprocessed, name_dataset)
+        status = self.split_dataset(X_preprocessed, Y_preprocessed)
         return status
 # Example usage (you can comment out this section if using as a module)
 if __name__ == "__main__":
     prep = preprocessing()
     drive_id = "1OoaUzSoFI-ZwHMQ55vr3MBpuNDVtJ_CX"  # Change this to your CSV file path
-    name_dataset = "ner_dataset_split"
-    status = prep.main(drive_id, name_dataset)
+    status = prep.main(drive_id)
