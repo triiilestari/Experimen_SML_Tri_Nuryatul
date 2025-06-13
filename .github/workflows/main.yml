@@ -61,6 +61,7 @@ jobs:
         run: |
           mv ./tokenizer.pkl preprocessing/tokenizer.pkl
           mv ./ner_dataset_split.pkl preprocessing/ner_dataset_split.pkl
+          ls preprocessing
 
       # debug file after move
       - name: Debug files
@@ -77,8 +78,8 @@ jobs:
           git config --global user.name ${{ secrets.username }}
           git config --global user.email ${{ secrets.email }}
           git status
-          git add preprocessing/ner_dataset_split.pkl
-          git add preprocessing/tokenizer.pkl
+          git add ./ner_dataset_split.pkl
+          git add ./tokenizer.pkl
           git commit -m "Auto-update dataset and tokenizer via GitHub Actions"
           git push origin main
   
