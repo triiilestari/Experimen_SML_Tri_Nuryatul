@@ -130,7 +130,7 @@ class preprocessing():
             Y_preprocessed.append(padded_tags)
         return Y_preprocessed
     
-    def split_dataset(self, X_preprocessed, Y_preprocessed, name_dataset):
+    def split_dataset(self, X_preprocessed, Y_preprocessed):
         try:
             indices = np.arange(len(Y_preprocessed))
             np.random.seed(seed=555)
