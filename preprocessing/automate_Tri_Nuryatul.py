@@ -254,7 +254,7 @@ class preprocessing():
             "X_test": X_test,
             "Y_test": Y_test
         }
-        with open("dataset/automate_{}_ML.pkl".format(file_path), "wb") as f:
+        with open("automate_{}_ML.pkl".format(file_path), "wb") as f:
             pickle.dump(data_ml, f)
         return True
 
