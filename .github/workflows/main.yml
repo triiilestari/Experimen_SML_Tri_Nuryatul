@@ -52,14 +52,13 @@ jobs:
           python preprocessing/automate_Tri_Nuryatul.py
           
       # move file result to processing
-      - name: Move artifacts to preprocessing folder
+      - name: Move dataset to preprocessing dataset folder
         run: |
           pwd
           ls
-          ls dataset
           mv ./tokenizer.pkl preprocessing/tokenizer.pkl
-          mv dataset/automate_ner_dataset_ML.pkl preprocessing/dataset/automate_ner_dataset_ML.pkl
-          mv dataset/automate_ner_dataset_DL.pkl preprocessing/dataset/automate_ner_dataset_DL.pkl
+          mv ./automate_ner_dataset_ML.pkl preprocessing/dataset/automate_ner_dataset_ML.pkl
+          mv ./automate_ner_dataset_DL.pkl preprocessing/dataset/automate_ner_dataset_DL.pkl
           ls preprocessing
           
       # Commit & Push Updated Files
