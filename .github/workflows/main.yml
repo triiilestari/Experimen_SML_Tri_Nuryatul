@@ -55,7 +55,8 @@ jobs:
       - name: Move artifacts to preprocessing folder
         run: |
           mv ./tokenizer.pkl preprocessing/tokenizer.pkl
-          mv ./dataset preprocessing/dataset
+          mv ./automate_ner_dataset_ML.pkl preprocessing/automate_ner_dataset_ML.pkl
+          mv ./automate_ner_dataset_DL.pkl preprocessing/automate_ner_dataset_DL.pkl
           ls preprocessing
           
       # Commit & Push Updated Files
