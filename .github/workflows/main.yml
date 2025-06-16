@@ -56,6 +56,7 @@ jobs:
         run: |
           pwd
           ls
+          ls dataset
           mv ./tokenizer.pkl preprocessing/tokenizer.pkl
           mv dataset/automate_ner_dataset_ML.pkl preprocessing/dataset/automate_ner_dataset_ML.pkl
           mv dataset/automate_ner_dataset_DL.pkl preprocessing/dataset/automate_ner_dataset_DL.pkl
